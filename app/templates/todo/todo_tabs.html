@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h3 class="lead">Todos OPS</h3>
+
+    <div class="container-fluid">
+        <ul class="nav nav-tabs" id="myTabs">
+            <li class="active"><a href="#list" data-url="{{ url_for('todo.list_todo')}}">List</a></li>
+            <li><a href="#new" data-url="{{ url_for('todo.new_todo')}}">New</a></li>
+            <li><a href="#finish" data-url="{{ url_for('todo.finish_todo')}}">Finish</a></li>
+        </ul>
+    </div>
+
+    <div class="tab-content">
+        <div class="tab-pane active" id="list"></div>
+        <div class="tab-pane" id="new"></div>
+        <div class="tab-pane" id="finish"></div>
+    </div>
+
+</div>
+{% endblock %}
+
+
+{% block tail_js %}
+<script type="text/javascript">
+      $('#myTabs a').click(function (e) {
+	      e.preventDefault();
+	      var url = $(this).attr("data-url");
+  	      var href = this.hash;
+  	      var pane = $(this);
+	      // ajax load from data-url
+	      $(href).load(url,function(result){
+	          pane.tab('show');
+	      });
+      });
+
+      // load first tab content
+      $('#list').load($('.active a').attr("data-url"),function(result){
+         $('.active a').tab('show');
+      });
+</script>
+
+<script type="text/javascript">
+    $('form.ajax').on('submit', function () {
+
+        var that = $(this); // whole form object
+        var url = that.attr('action');
+        var type = that.attr('method');
+
+        var data = {};
+        // data object will be send through jquery method and we need to pass it as a json object
+        // json containing name of the field and value of the field
+
+        // find all form fields called name - they contain some data to save to db
+        that.find('[name]').each( function(index, value) {
+            var thatInsideEach = $(this); // this is this for each elemet of the form containing attr name
+            var name = thatInsideEach.attr('name');
+            var nameValue = thatInsideEach.val();
+
+            data[name] = nameValue;
+        });
+
+        $.ajax({
+            url: url,
+            type: type,
+            data: data,
+            success: function(response) {
+
+                // clear form fields now on because success
+                that.find('[name]').each( function() {
+                    $(this).val('');
+            });
+
+            // send info about success
+            $('div#name-data').empty();
+            $('div#name-data').append('Succesuly saved to DB').css('color', 'red');
+            console.log(response);
+            }
+         });
+
+        return false;
+    });
+</script>
+{% endblock %}

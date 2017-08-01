@@ -1,0 +1,54 @@
+{% from '_macros.html' import  bootstrap_css, bootstrap_js, jquery_js -%}
+{{ bootstrap_css() }}
+{{ jquery_js() }}
+{{ bootstrap_js() }}
+
+
+{% block content %}
+<div class="container">
+    <h2>Create New Todo</h2>
+    </br>
+    <form action="{{ url_for('todo.new_todo') }}" method=post>
+        <div class="form-group row">
+            <div class="col-xs-2">
+                <label for="category" class="control-label">Cretegory</label>
+                <select id="category" class="form-control" name="category" required>
+                    {% for category in categories %}
+                        <option value="{{ category.id }}" {%if todo is defined %}{% if todo.category_id == category.id %} selected {% endif %}{% endif %}>{{ category.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-xs-2">
+                <label for="priority" class="control-label">Priority</label>
+                <select id="priority" class="form-control" name="priority" required>
+                    {% for priority in priorities %}
+                        <option value="{{ priority.id }}" {% if todo is defined %}{% if todo.priority_id == priority.id %} selected {% endif %}{% endif %}>{{ priority.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-xs-4">
+                <label for="description" class="control-label">Description</label>
+                <textarea id="description" name="description" class="form-control" rows="5" cols="36" placeholder="Describe TODO" required>
+                    {%- if todo is defined -%}
+                        {{ todo.description }}
+                    {% endif -%}
+                </textarea>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <div class="controls">
+                <button type="submit" class="btn btn-success">Create Todo</button>
+            </div>
+        </div>
+
+    </form>
+</div>
+{% endblock %}
+

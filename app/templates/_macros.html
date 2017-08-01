@@ -1,0 +1,22 @@
+{% macro icon(name) %}
+    <span class="glyphicon glyphicon-{{ name }}"></span>
+{% endmacro %}
+
+{% macro datatables() %}
+    <script type="text/javascript" src="{{ url_for('static', filename='js/dataTables.bootstrap.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.dataTables.min.js') }}"></script>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/dataTables.bootstrap.min.css') }}">
+{%- endmacro %}
+
+{% macro bootstrap_css() %}
+    <link rel="stylesheet" type="text/css"  href="{{ url_for('static', filename='css/bootstrap.css')}}">
+{% endmacro %}
+
+{% macro bootstrap_js() %}
+    <script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap.js')}}"></script>
+{% endmacro %}
+
+{% macro jquery_js() %}
+    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery-2.1.3.js')}}"></script>
+{% endmacro %}
+

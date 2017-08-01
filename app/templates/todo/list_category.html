@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+{% from '_macros.html' import icon %}
+
+{% block content %}
+<div class="container">
+    <div class="col-md-12">
+        <h3 class="lead">Category OPS</h3>
+        <p><a href="#" class="btn btn-success" data-target="#modalAdd" data-toggle="modal">Add Category</a></p>
+        <div id="rounded">
+            <table id="category-table" class="table" style="table-layout: fixed">
+               {%- for category in categories %}
+                  <tr>
+                      <td>
+                          <a href="{{ url_for('todo.list_todo_by_cateory', name=category.name) }}">{{ category.name }}</a>
+                      </td>
+                      <td>
+                          <a class="btn btn-sm btn-default open_modal" href="#"  cid="{{ category.id }}">{{ icon('edit') }}Edit</a>
+                      </td>
+                      <td>
+                          <a class="btn btn-sm btn-danger" href="#" onclick="confirm_modal('{{ url_for('todo.delete_category', category_id=category.id) }}');">{{ icon('trash') }} Delete</a>
+                      </td>
+                   </tr>
+                {%- endfor %}
+            </table>
+        </div>
+    </div>
+
+    <!-- Modal Popup Add -->
+    <div id="modalAdd" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title" id="myModalLabel">Create new category</h4>
+                </div>
+
+                <div class="modal-body">
+                    <form action="{{ url_for('todo.new_category')}}" name="modal_popup" enctype="multipart/form-data" method="POST">
+                          <div class="form-group row">
+                              <div class="col-xs-4">
+                                  <label for="category" class="control-label">Category Name</label>
+                                  <input type="text" id="category" name="category"  class="form-control" placeholder="Category Name" required/>
+                              </div>
+                          </div>
+
+                        <div class="modal-footer">
+                            <button class="btn btn-success" type="submit">Submit</button>
+                            <button type="reset" class="btn btn-danger"  data-dismiss="modal" aria-hidden="true">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Popup Edit -->
+    <div id="modalEdit" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div>
+
+    <!-- Modal Popup Delete -->
+    <div class="modal fade" id="modalDelete">
+        <div class="modal-dialog">
+            <div class="modal-content" style="margin-top:100px;">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" style="text-align:center;">Are you sure to delete this information ?</h4>
+                </div>
+
+                <div class="modal-footer" style="margin:0px; border-top:0px; text-align:center;">
+                    <a href="#" class="btn btn-danger" id="delete_link">Delete</a>
+                    <button type="button" class="btn btn-success" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
+
+
+{% block tail_js %}
+<!-- Javascript popup modal Edit  -->
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(".open_modal").click(function(e) {
+            var cid = $(this).attr("cid");
+            $.ajax({
+                url: "{{ url_for('todo.edit_category') }}",
+                type: "GET",
+                data : {category_id: cid,},
+                success: function (ajaxData){
+                    $("#modalEdit").html(ajaxData);
+                    $("#modalEdit").modal('show',{backdrop: 'true'});
+                }
+            });
+        });
+    });
+</script>
+
+
+<!-- Javascript popup modal Delete  -->
+<script type="text/javascript">
+    function confirm_modal(delete_url){
+        $('#modalDelete').modal('show', {backdrop: 'static'});
+            document.getElementById('delete_link').setAttribute('href' , delete_url);
+    }
+</script>
+
+{% endblock %}

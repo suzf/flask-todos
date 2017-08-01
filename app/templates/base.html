@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+    {% block head %}
+        <meta charset="UTF-8">
+        <title>{% block title %}Flask Demo{% endblock %}</title>
+    {% endblock %}
+    {% from '_macros.html' import bootstrap_css -%}
+    {{ bootstrap_css() }}
+    {% block head_css %}{% endblock %}
+    {% block head_js %}{% endblock %}
+    {% from '_macros.html' import jquery_js, bootstrap_js, datatables -%}
+    {{ jquery_js() }}
+    {{ bootstrap_js() }}
+    {{ datatables() }}
+    <link rel="stylesheet" href="/static/css/menutree.css">
+
+    <!--<script>
+        $(document).ready(function () {
+            $('.selectpicker').selectpicker();
+        })
+    </script>-->
+    <style type="text/css">
+        html {
+            position: relative;
+            height: 80%;
+        }
+        body {
+            /* Margin bottom by footer height */
+            margin-bottom: 60px;
+            height: 80%;
+        }
+
+        .fill {
+            min-height: 100%;
+            height: 100%;
+        }
+        .footer {
+            text-align:center;
+            margin-bottom: 20px;
+            width: 100%;
+            /* Set the fixed height of the footer here */
+            height: 40px;
+            line-height: 40px; /* Vertically center the text there */
+        }
+
+        #category-table {
+            max-width: 321px;
+            border: 0px;
+        }
+        #category-table tbody tr > td.success {
+            background-color: #8cbfee !important;
+        }
+        #rounded {
+            border: 2px solid #7087a1;
+            padding: 10px 20px;
+            background: #d8dcee;
+            border-radius: 10px;
+            max-width: 350px;
+        }
+    </style>
+
+</head>
+
+<body>
+<nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                 data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+            </button>
+            <a class="navbar-brand" href="/">Flask Demo</a>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container-fluid -->
+</nav>
+
+
+<div class="container fill">
+    {% for message in get_flashed_messages() %}
+       <div class="alert alert-warning">
+           <button type="button" class="close" data-dismiss="alert">&times;</button>
+           {{ message }}
+       </div>
+    {% endfor %}
+
+    <div class="row" id="content_section">
+        <div class="col-md-2">
+            <div class="well no-padding">
+                <ul class="nav nav-list nav-menu-list-style">
+                    <li>
+                        <label class="tree-toggle nav-header glyphicon-icon-rpad">
+                        <span class="glyphicon glyphicon-folder-close m5"></span>Flask Demo
+                        <span class="menu-collapsible-icon glyphicon "></span></label>
+                    </li>
+                    <li>
+                        <label class="tree-toggle nav-header">Todo</label>
+                        <ul class="nav nav-list tree">
+                            <li><a href="{{ url_for('todo.index') }}">Todos OPS</a></li>
+                            <li><a href="{{ url_for('todo.list_category') }}">Category OPS</a></li>
+                        </ul>
+                    </li>
+
+                    <li>
+                        <label class="tree-toggle nav-header">About</label>
+                        <ul class="nav nav-list tree">
+                            <li><a href="#">Overview</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-md-10" role="main">{% block content %}{% endblock %}</div>
+    </div>
+</div>
+
+
+<footer class="footer">
+    <div class="container">
+        <span class="text-muted">Flask Demo built using Flask, SQLAlchemy, MySQL and Bootstrap</span>
+    </div>
+</footer>
+
+<!-- javascripts -->
+<script type="text/javascript">
+    $('.tree-toggle').click(function () {
+        $(this).parent().children('ul.tree').toggle(200);
+    });
+
+    $(function(){
+        $('.tree-toggle').parent().children('ul.tree').toggle(200);
+    });
+</script>
+{% block tail_js %}{% endblock %}
+
+</body>
+</html>
