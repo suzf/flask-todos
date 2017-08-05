@@ -15,20 +15,18 @@
     {{ datatables() }}
     <link rel="stylesheet" href="/static/css/menutree.css">
 
-    <!--<script>
-        $(document).ready(function () {
-            $('.selectpicker').selectpicker();
-        })
-    </script>-->
     <style type="text/css">
         html {
             position: relative;
-            height: 80%;
+            height: auto;
         }
         body {
             /* Margin bottom by footer height */
             margin-bottom: 60px;
             height: 80%;
+        }
+        div {
+            overflow: hidden;
         }
 
         .fill {
@@ -80,13 +78,6 @@
 
 
 <div class="container fill">
-    {% for message in get_flashed_messages() %}
-       <div class="alert alert-warning">
-           <button type="button" class="close" data-dismiss="alert">&times;</button>
-           {{ message }}
-       </div>
-    {% endfor %}
-
     <div class="row" id="content_section">
         <div class="col-md-2">
             <div class="well no-padding">
@@ -114,7 +105,15 @@
             </div>
         </div>
 
-        <div class="col-md-10" role="main">{% block content %}{% endblock %}</div>
+        <div class="col-md-10" role="main">
+            {% for message in get_flashed_messages() %}
+            <div class="alert alert-warning">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                {{ message }}
+            </div>
+            {% endfor %}
+            {% block content %}{% endblock %}
+        </div>
     </div>
 </div>
 
