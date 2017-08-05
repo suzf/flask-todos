@@ -24,7 +24,7 @@ def list_todo():
 @todo.route('/finish_todo')
 def finish_todo():
     return render_template(
-        'todo/list_todo.html',
+        'todo/finish_todo.html',
         todos = Todo.query.filter_by(is_done=1).all(),
     )
 
