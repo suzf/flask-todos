@@ -1,0 +1,63 @@
+{% from '_macros.html' import icon %}
+{% from '_macros.html' import jquery_js, datatables, bootstrap_css, bootstrap_js -%}
+{{ bootstrap_css() }}
+{{ jquery_js() }}
+{{ bootstrap_js() }}
+{{ datatables() }}
+
+
+{% block content %}
+<div class="container">
+    <div class="col-md-8">
+        {% if todos|count > 0 %}
+        <table id="todo-finish-table" class="table table-striped table-bordered">
+           <thead>
+           <tr>
+                <th>#</th>
+                <th>Description</th>
+                <th>Category</th>
+                <th>Priority</th>
+                <th>Creation date</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {%- for todo in todos %}
+                <tr {% if todo.is_done %}class="success"{% endif %}>
+                    <td> {{ loop.index }} </td>
+                    <td {% if todo.is_done %}style="text-decoration:line-through"{% endif %}>{{ todo.description }}</td>
+                    <td>{{ todo.category.name }}</td>
+                    <td>{{ todo.priority.name }}</td>
+                    <td>{{ todo.creation_date }}</td>
+                    <td>
+                        <form id=del-finish-{{ loop.index }} action="{{ url_for('todo.delete_todo', todo_id=todo.id) }}" method="post">
+                            <a onclick="$('#del-finish-{{ loop.index }}').submit();" class="btn btn-xs btn-danger" id="delete_finish_todo" href="#">{{ icon('trash') }} Delete</a>
+                        </form>
+                    </td>
+                </tr>
+            {%- endfor %}
+            </tbody>
+        </table>
+        {% else %}
+            <h3 class=lead>No Todos Yet</h3>
+        {% endif %}
+    </div>
+
+
+</div>
+{% endblock %}
+
+
+{% block tail_js %}
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#todo-finish-table').DataTable(
+            {
+                "aoColumnDefs": [
+                    { 'bSortable': false, 'aTargets': [ 0, 5 ] }
+                ]
+            }
+        );
+      });
+</script>
+{% endblock %}
