@@ -60,6 +60,7 @@
     $(document).ready(function() {
         $('#todo-table').DataTable(
             {
+                "pageLength": 9,
                 "aoColumnDefs": [
                     { 'bSortable': false, 'aTargets': [ 0, 5 ] }
                 ]

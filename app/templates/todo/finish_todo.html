@@ -53,6 +53,7 @@
     $(document).ready(function() {
         $('#todo-finish-table').DataTable(
             {
+                "pageLength": 9,
                 "aoColumnDefs": [
                     { 'bSortable': false, 'aTargets': [ 0, 5 ] }
                 ]
